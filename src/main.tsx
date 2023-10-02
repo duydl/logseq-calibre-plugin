@@ -2,9 +2,19 @@ import "@logseq/libs"
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Viewer from './Viewer'
+import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 
+const settings: SettingSchemaDesc[] = [
+  {
+    key: "viewerWidth",
+    title: "Adjust Viewer Width in %",
+    type: "number",
+    default: 50,
+    description: ''
+  },
+];
 
-logseq.ready(() => {
+async function main() {
   console.log('=== logseq-calibre-annotation Plugin Loaded ===')
 
   // 1. MacroRenderer and Model for Viewer Component //
@@ -56,8 +66,17 @@ logseq.ready(() => {
         #logseq-calibre-annotation_lsp_main {
           position: fixed ;
           top: 3rem ;
-          left: 60% ;
-          width: 40% ;
+          left: ${100 - logseq.settings?.viewerWidth}% ;
+          width: ${logseq.settings?.viewerWidth}%;
+          height: 92% ;
+          z-index: 9;
+        }
+
+        #logseq-calibre-annotation-test_lsp_main {
+          position: fixed ;
+          top: 3rem ;
+          left: ${100 - logseq.settings?.viewerWidth}% ;
+          width: ${logseq.settings?.viewerWidth}% ;
           height: 92% ;
           z-index: 9;
         }
@@ -65,7 +84,7 @@ logseq.ready(() => {
         #main-container {
           position: fixed ;
           left: 0% ;
-          width: 60% ;
+          width: ${100 - logseq.settings?.viewerWidth}% ;
         }
         `,
       })
@@ -133,9 +152,8 @@ logseq.ready(() => {
         const flag = `{{renderer calibreHighlight, false,`
         newContent = block?.content?.replace(`${flag}`,
           `{{renderer calibreHighlight, true,`);
-        const annotationLink = e.dataset.hostLink + "/book-get-annotations/" + e.dataset.bookId;
         const syncInterval = e.dataset.syncInterval
-        startSyncing(blockUuid, annotationLink, syncInterval)
+        startSyncing(blockUuid, e.dataset.hostLink, e.dataset.bookId, syncInterval)
       }
 
       if (!newContent) return
@@ -144,45 +162,45 @@ logseq.ready(() => {
     },
   });
 
-})
+};
 
 // 3. Methods for periodically syncing annotations from Calibre to Logseq // 
 
-let intervalId; // Variable to store the interval ID
+let intervalId; // Variable to store the interval ID. // Globally defined // Only one book syncing at a time
 
-async function startSyncing(blockUuid, annotationLink, syncInterval) {
+async function startSyncing(blockUuid, hostLink, bookId, syncInterval) {
   // Clear any existing interval (if there is one)
   clearInterval(intervalId);
   // Set the new interval
   intervalId = setInterval(async () => {
-    await fetchUpdate(blockUuid, annotationLink);
+    await fetchUpdate(blockUuid, hostLink, bookId);
   }, syncInterval); // Adjust the interval as needed 
 
   // Initial fetch and update
-  fetchUpdate(blockUuid, annotationLink);
+  fetchUpdate(blockUuid, hostLink, bookId);
 }
 
 function stopSyncing() {
   clearInterval(intervalId);
 }
 
-async function fetchUpdate(blockUuid, annotationLink) {
+async function fetchUpdate(blockUuid, hostLink, bookId) {
   const lastTimestamp = await logseq.Editor.getBlockProperty(
     blockUuid,
-    "lastsync"
+    "lastsync"  
   );
-  const parts = annotationLink.split("/");
-  const lib = parts[parts.length - 2];
-  const idAndFormat = parts[parts.length - 1].split("-");
+  const parts = bookId.split("/");
+  const lib = parts[0];
+  const idAndFormat = parts[1].split("-");
   const id = idAndFormat[0];
   const format = idAndFormat[1];
 
   const lastSync = lastTimestamp ? 
     new Date(lastTimestamp) : new Date(0); // Initialize to the smallest possible date
-
-  const response = await fetch(annotationLink);
+    console.log(hostLink + "/book-get-annotations/" + bookId)
+  const response = await fetch(hostLink + "/book-get-annotations/" + bookId);
   const data = await response.json() as FetchResponse;
-
+  
   const annotations = Object.values(data)[0].annotations_map.highlight;
 
   const filtered_annotations = annotations
@@ -196,7 +214,7 @@ async function fetchUpdate(blockUuid, annotationLink) {
 
   
   filtered_annotations.forEach(element => {
-    logseq.Editor.insertBlock(blockUuid, makeBlock(element, lib, id, format), {
+    logseq.Editor.insertBlock(blockUuid, makeBlock(element, hostLink, lib, id, format), {
       isPageBlock: false,
     });
   });
@@ -208,7 +226,7 @@ async function fetchUpdate(blockUuid, annotationLink) {
   }
 }
 
-function makeBlock(jsonObject, lib, id, fmt) {
+function makeBlock(jsonObject, hostLink, lib, id, fmt) {
   const {
     highlighted_text,
     timestamp,
@@ -225,7 +243,7 @@ function makeBlock(jsonObject, lib, id, fmt) {
   style.kind == "color" && style.type == "builtin" ? color = style.which : color = "white";
   const note_add = notes ? "\n" + notes : "";
 
-  const markdownString = `{{renderer calibreViewer, ${color}, http://127.0.0.1:8080/#book_id=${id}&bookpos=epubcfi%28/${(spine_index+1)*2}${start_cfi}%29&fmt=${fmt}&library_id=${lib}&mode=read_book }} ${highlighted_text}${note_add}`;
+  const markdownString = `{{renderer calibreViewer, ${color}, ${hostLink}/#book_id=${id}&bookpos=epubcfi%28/${(spine_index+1)*2}${start_cfi}%29&fmt=${fmt}&library_id=${lib}&mode=read_book }} ${highlighted_text}${note_add}`;
 
   return markdownString;
 }
@@ -274,3 +292,6 @@ interface AnnotationsData {
 interface FetchResponse {
   [key: string]: AnnotationsData;
 }
+
+
+logseq.useSettingsSchema(settings).ready(main).catch(console.error)
