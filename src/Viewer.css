@@ -1,0 +1,24 @@
+.iframe {
+  box-sizing: border-box;
+  display: flex;
+  height: 100vh;
+  left: 0;
+  overflow-y: hidden;
+  position: fixed;
+  top: 0;
+  width: 98vw;
+}
+
+.close-viewer-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2%;
+  height: 10%;
+  background-color: brown;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+}
