@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/duydl/logseq-calibre-annotation/compare/v1.1.0...v1.1.1) (2023-10-08)
+
+
+### Bug Fixes
+
+* fix right sidebar overlap after close viewer ([9170df4](https://github.com/duydl/logseq-calibre-annotation/commit/9170df4da4d67544a4fb17a9b63ea99ce5671a6d))
+
 # [1.1.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.0.0...v1.1.0) (2023-10-02)
 
 
