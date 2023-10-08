@@ -75,6 +75,6 @@ Without `calibreAnnotation`, you'll have a block with two non-functional rendere
 - Add location property to highlights to sort by location instead of timestamp
 - Add more customized settings
 - Adapt to other webtool. Omnivore Highlight, Youtube Timestamp, etc. 
-
+- Add multiple iframe to side viewer. Save state of all opened iframe when new one opened.
 
 ## License

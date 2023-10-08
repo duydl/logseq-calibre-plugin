@@ -14,6 +14,8 @@ const settings: SettingSchemaDesc[] = [
   },
 ];
 
+
+
 async function main() {
   console.log('=== logseq-calibre-annotation Plugin Loaded ===')
 
@@ -55,9 +57,10 @@ async function main() {
 
   logseq.provideModel({
     showViewer(e) {
+      // console.log(document.getElementById("right-sidebar"))
       let srcLink = e.dataset.srcLink
       // let blockUuid = e.dataset.blockUuid
-
+      // logseq.App.setRightSidebarVisible(true)
       renderViewer(srcLink)
 
       logseq.provideStyle({
@@ -65,27 +68,27 @@ async function main() {
         style: `
         #logseq-calibre-annotation_lsp_main {
           position: fixed ;
-          top: 3rem ;
+          top: 0% ;
           left: ${100 - logseq.settings?.viewerWidth}% ;
           width: ${logseq.settings?.viewerWidth}%;
-          height: 92% ;
+          height: 100% ;
           z-index: 9;
         }
 
         #logseq-calibre-annotation-test_lsp_main {
           position: fixed ;
-          top: 3rem ;
+          top: 0% ;
           left: ${100 - logseq.settings?.viewerWidth}% ;
           width: ${logseq.settings?.viewerWidth}% ;
-          height: 92% ;
+          height: 100% ;
           z-index: 9;
         }
 
-        #main-container {
-          position: fixed ;
-          left: 0% ;
+        #app-container {
           width: ${100 - logseq.settings?.viewerWidth}% ;
         }
+        
+
         `,
       })
       logseq.showMainUI()

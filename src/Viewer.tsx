@@ -5,14 +5,10 @@ import './Viewer.css'
 const Viewer: React.FC<{ srcLink: string}> = ({ srcLink}) => {
 
   const hide = () => {
-
     logseq.provideStyle({
+      // key: 'content-widen-mode', // Not providing key would reset style
       style: `
-      #logseq-calibre-annotation_lsp_main {
-        left: 0% ;
-        width: 100% ;
-      }
-      #main-container {
+      #app-container {
         width: 100% ;
       }
       `,

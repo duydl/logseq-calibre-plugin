@@ -30,7 +30,7 @@
     "vite": "^2.7.2"
   },
   "logseq": {
-    "id": "logseq-calibre-annotation",
+    "id": "logseq-calibre-annotation-test",
     "title": "calibreAnnotation",
     "icon": "./icon.jpg"
   }
