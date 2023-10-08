@@ -70,6 +70,8 @@ Without `calibreAnnotation`, you'll have a block with two non-functional rendere
 
 - Calibre Content Server is a very convenient tool. Add annotations to your books in a browser or on any other device, and the annotations will seamlessly sync to the page.
 
+- There is now option to adjust the viewer width on opening in the plugin setting: 
+![Alt text](./screenshots/image.png)
 ## Future Enhancements
 
 - Add location property to highlights to sort by location instead of timestamp
