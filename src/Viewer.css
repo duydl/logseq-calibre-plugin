@@ -6,19 +6,52 @@
   overflow-y: hidden;
   position: fixed;
   top: 0;
-  width: 98vw;
+  width: 100vw;
 }
 
-.close-viewer-button {
+.button-container  {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 2%;
-  height: 10%;
-  background-color: brown;
+  display: inline-block;
+  min-width: auto;
+  height: 27px; 
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  cursor: grab;
+}
+
+.button-container:active {
+  cursor: grabbing;
+}
+
+
+.button {
+  background-color: transparent;
+  width: 30px; 
+  height: 100%;
+  padding-right: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   border: none;
+  z-index: 21;
+  cursor: pointer;
+}
+
+
+.drag-button{
+  background-color: transparent;
+  width: 30px; 
+  height: 80%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  z-index: 21;
 }

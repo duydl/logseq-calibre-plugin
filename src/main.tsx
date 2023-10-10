@@ -7,10 +7,10 @@ import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 const settings: SettingSchemaDesc[] = [
   {
     key: "viewerWidth",
-    title: "Adjust Viewer Width in %",
+    title: "Adjust viewer width ",
     type: "number",
-    default: 50,
-    description: ''
+    default: 40,
+    description: 'Value in percentage. Must reopen viewer for change to take effect. Your reading position will be remembered if using Open button. More interactive option will be added in later date.'
   },
 ];
 
