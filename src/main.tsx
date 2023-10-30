@@ -68,19 +68,19 @@ async function main() {
         style: `
         #logseq-calibre-annotation_lsp_main {
           position: fixed ;
-          top: 0% ;
+          top: 3rem ;
           left: ${100 - logseq.settings?.viewerWidth}% ;
           width: ${logseq.settings?.viewerWidth}%;
-          height: 100% ;
+          height: calc(100% - 3rem) ;
           z-index: 9;
         }
 
         #logseq-calibre-annotation-test_lsp_main {
           position: fixed ;
-          top: 0% ;
+          top: 3rem ;
           left: ${100 - logseq.settings?.viewerWidth}% ;
           width: ${logseq.settings?.viewerWidth}% ;
-          height: 100% ;
+          height: calc(100% - 3rem) ;
           z-index: 9;
         }
 

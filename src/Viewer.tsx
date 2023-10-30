@@ -4,8 +4,6 @@ import './Viewer.css'
 
 const Viewer: React.FC<{ srcLink: string}> = ({ srcLink}) => {
 
-  
-
   return (
     <>
     <ButtonContainer srcLink={srcLink}/>
@@ -59,7 +57,10 @@ const ButtonContainer: React.FC<{ srcLink: string}> = ({ srcLink}) => {
     <div
       title="Drag to Move"
       className={`button-container ${isDragging ? 'dragging' : ''}`}
-      style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+      style={{ left: '50%',
+      top: '50%',
+      transform: `translate(-50%, -50%) translate(${position.x}px, ${position.y}px)`,
+      position: 'absolute'}}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
