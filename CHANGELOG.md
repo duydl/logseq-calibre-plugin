@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/duydl/logseq-calibre-annotation/compare/v1.2.0...v1.2.1) (2023-10-30)
+
+
+### Bug Fixes
+
+* adjust viewer height and bar loc ([a2ab49d](https://github.com/duydl/logseq-calibre-annotation/commit/a2ab49da367a84fdc213e65d4f14d1a592ee9720))
+
 # [1.2.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.1.1...v1.2.0) (2023-10-10)
 
 
