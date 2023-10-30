@@ -44,21 +44,15 @@ You'll first need to specify the name of the library where you store the books y
 
 The `calibreAnnotation` plugin adds two button renderers for `calibreViewer` and `calibreSync`.
 
-- `{{renderer calibreViewer, color, link}}`: This button opens a book viewer on the right-hand side.
+- `{{renderer calibreViewer, color, link}}`: This button opens a book viewer on the right-hand side. You could close the viewer, edit the viewer width, or open the book in browser with the control bar.
 
 ![GIF Demo](./screenshots/demo3.gif)
-
-![GIF Demo](./screenshots/demo4.gif)
 
 - `{{renderer calibreSync, syncstate, interval, hostlink, lib, id, fmt}}`: This button initiates the sync process, fetching annotations and applying them to the corresponding blocks in real-time.
 
 ![GIF Demo](./screenshots/demo5.gif)
 
-![GIF Demo](./screenshots/demo6.gif)
-
 You can click on the button again to stop syncing. If needed, you can copy the content to a new block, and it will only sync the latest position as recorded by `lastsync` property of the block.
-
-![GIF Demo](./screenshots/demo7.gif)
 
 ### Notes
 
