@@ -118,7 +118,9 @@ async function main() {
       // key: 'content-widen-mode', // Not providing key would reset style
       style: `
       #logseq-calibre-annotation_lsp_main {
+        position: fixed ;
         width: 100%;
+        left: 0% ;
       }
       #app-container {
         width: 100% ;
@@ -378,7 +380,7 @@ function renderViewer(srcLink: string) {
 
 function renderSearchbar() {
     ReactDOM.render(
-      <div id="search" style={{ position: "absolute", backgroundColor: "transparent", top: "2.5em", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: "0.5em", width: "100vw", height: "100vh", overflow: "auto", zIndex: 100 }}>
+      <div id="search" >
         <div id="search-bar-container" >
           <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-letter-c" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" stroke="#FF8C00" fill="none" strokeLinecap="round" strokeLinejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -393,6 +395,7 @@ function renderSearchbar() {
     );
     const search_div = document.getElementById('search') 
       let search_bar: HTMLInputElement = document.getElementById("search-bar") as HTMLInputElement;
+      search_bar.focus()
       let search_results_item_container: HTMLElement = document.getElementById("search-results") as HTMLElement;
       let typingTimer: number | undefined;
       search_div?.addEventListener("keydown", function (e) {
