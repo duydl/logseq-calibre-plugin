@@ -2,23 +2,137 @@ import "@logseq/libs"
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Viewer from './Viewer'
+import * as SearchFuncs from './search';
+import { clearDriftless, setDriftlessTimeout } from "driftless";
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 
 const settings: SettingSchemaDesc[] = [
+    {
+      key: "viewerWidth",
+      title: "Adjust viewer width ",
+      type: "number",
+      default: 40,
+      description: 'Value in percentage. Must reopen viewer for change to take effect. Your reading position will be remembered if using Open button. More interactive option will be added in later date.'
+    },
+    {
+      key: "calibreLibrary",
+      title: "Preferred Calibre Library",
+      description: "Set your preferred Calibre library location.",
+      type: "string",
+      default: ""
+  },
   {
-    key: "viewerWidth",
-    title: "Adjust viewer width ",
-    type: "number",
-    default: 40,
-    description: 'Value in percentage. Must reopen viewer for change to take effect. Your reading position will be remembered if using Open button. More interactive option will be added in later date.'
+      key: "addBlockInstead",
+      title: "Add block instead of page",
+      description: "Add a new block at cursor instead of line to new page",
+      type: "boolean",
+      default: false
+  },
+  {
+      key: "serverLink",
+      title: "Content Server Link",
+      description: "Specify the link to your content server. The default is localhost:8080, but change it if you use a different port or domain. <br>Add the link WITHOUT the extra /; otherwise it could result in error. <br>If update to library isn't registered, use the link for local home network device i.e the one displayed when clicking on Connect/share in Calibre to avoid the cache problem.",
+      type: "string",
+      default: "http://localhost:8080"
+  },
+  {
+      key: "pageTitleTemplate",
+      title: "Page Title Template",
+      description: "Define the template for new Calibre page titles. The default template is 'calibre/{{title}} - {{authors}} ({{date}})'.",
+      type: "string",
+      default: "calibre/{{title}} - {{authors}} ({{date}})"
+  },
+  {
+      key: "pageProperties",
+      title: "Page Properties",
+      description: "Select the properties i.e metadata to be included in the new Calibre page. Note that the rating property currently returns an error. The default metadata is 'tags, isbn, date, publisher, language, authors, format'.",
+      type: "string",
+      default: "tags, isbn, date, publisher, language, authors, format"
+  },
+  {
+      key: "bookFormat",
+      title: "Preferred Book Format for Renderers",
+      description: "Choose your preferred book format for Viewer Macro and Sync Macro. The default is epub.",
+      type: "string",
+      default: "epub"
   },
 ];
 
 
-
 async function main() {
-  console.log('=== logseq-calibre-annotation Plugin Loaded ===')
+  console.log("=== logseq-calibre-annotation Plugin Loaded ===");
 
+  console.log("=== logseq-calibre-metadata Plugin Loaded ===");
+
+  logseq.App.getUserConfigs().then(configs => {
+      (configs.preferredThemeMode == "dark") ? document.body.className = "dark-theme" : document.body.className = "light-theme";
+  });
+
+  logseq.App.onThemeModeChanged((updated_theme) => {
+      (updated_theme.mode == "dark") ? document.body.className = "dark-theme" : document.body.className = "light-theme";
+  });
+
+  // toolbar icon
+  logseq.provideModel({
+    show_settings() {
+        logseq.showSettingsUI();
+    }
+  });
+  logseq.App.registerUIItem("toolbar", {
+    key: "logseg-calibre-annotation",
+    template:
+        `<a data-on-click="show_settings" class="button">
+            <svg id="calibre-icon" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-letter-c" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="var(--ls-primary-text-color)" fill="none">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M17 4H12 C11 3 7 6 7 12 C7 18 11 21 12 20 H17" />
+            </svg>
+        </a>`
+  });
+
+  // 0. Metadata 
+  // Slash Command
+  logseq.Editor.registerSlashCommand("Calibre 2: Add a Calibre book", async () => {
+    if (!logseq.settings?.calibreLibrary) {
+        logseq.UI.showMsg("calibreMetadata: SET CALIBRE LIBRARY", "warning") 
+        return
+    }
+    // logseq.provideStyle({
+    //   // key: 'content-widen-mode', // Not providing key would reset style
+    //   style: `
+    //   #logseq-calibre-annotation_lsp_main {
+    //     position: fixed ;
+    //     top: 3rem ;
+    //     left: 100% ;
+    //     width: 100%;
+    //     height: calc(100% - 3rem) ;
+    //     z-index: 9;
+    //   }
+    //   #app-container {
+    //     width: 100% ;
+    //   }
+
+    //   `,
+    // })
+
+    logseq.provideStyle({
+      // key: 'content-widen-mode', // Not providing key would reset style
+      style: `
+      #logseq-calibre-annotation_lsp_main {
+        width: 100%;
+      }
+      #app-container {
+        width: 100% ;
+      }
+
+      `,
+    })
+    console.log("TEST5")
+    renderSearchbar()
+    logseq.showMainUI();
+    const search_bar: HTMLInputElement = document.getElementById("search-bar") as HTMLInputElement;
+    search_bar.focus();
+  });
+      
   // 1. MacroRenderer and Model for Viewer Component //
 
   logseq.App.onMacroRendererSlotted(({ slot, payload }) => {
@@ -87,7 +201,6 @@ async function main() {
         #app-container {
           width: ${100 - logseq.settings?.viewerWidth}% ;
         }
-        
 
         `,
       })
@@ -262,6 +375,44 @@ function renderViewer(srcLink: string) {
     
   )
 }
+
+function renderSearchbar() {
+    ReactDOM.render(
+      <div id="search" style={{ position: "absolute", backgroundColor: "transparent", top: "2.5em", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: "0.5em", width: "100vw", height: "100vh", overflow: "auto", zIndex: 100 }}>
+        <div id="search-bar-container" >
+          <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-letter-c" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" stroke="#FF8C00" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M17 4H12 C11 4 7 6 7 12 C7 18 11 20 12 20 H17" />
+          </svg>
+          <input id="search-bar" type="text" placeholder="Search Calibre library" />
+        </div>
+        <ul id="search-results">
+        </ul>
+      </div>,
+      document.getElementById('root')
+    );
+    const search_div = document.getElementById('search') 
+      let search_bar: HTMLInputElement = document.getElementById("search-bar") as HTMLInputElement;
+      let search_results_item_container: HTMLElement = document.getElementById("search-results") as HTMLElement;
+      let typingTimer: number | undefined;
+      search_div?.addEventListener("keydown", function (e) {
+        if (e.key == "Escape") {
+            SearchFuncs.exitSearch();
+        }
+      });
+      search_bar.addEventListener("input", () => {
+        if (search_results_item_container) {
+            SearchFuncs.clearSearchResults();
+            clearDriftless(typingTimer);
+            typingTimer = setDriftlessTimeout(() => {
+                if (search_bar.value) {
+                  SearchFuncs.getCalibreItems(search_bar.value);
+                }
+            }, 750);
+        }
+    });
+  }
+
 
 interface Highlight {
   type: string;

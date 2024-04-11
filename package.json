@@ -12,7 +12,9 @@
   },
   "author": "duydl",
   "dependencies": {
-    "@logseq/libs": "^0.0.1-alpha.34",
+    "@logseq/libs": "^0.0.6",
+    "driftless": "^2.0.3",
+    "fuse.js": "^6.6.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -30,7 +32,7 @@
     "vite": "^2.7.2"
   },
   "logseq": {
-    "id": "logseq-calibre-annotation-test",
+    "id": "logseq-calibre-annotation",
     "title": "calibreAnnotation",
     "icon": "./icon.jpg"
   }
