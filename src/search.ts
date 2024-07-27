@@ -1,45 +1,42 @@
-// Importing types from Logseq and libraries
 import "@logseq/libs";
 import Fuse from "fuse.js";
+import DigestClient from "digest-fetch";
 
-// Typing timer can be a number or undefined
-
-
-// const username = '';
-// const passwordd = '';
-
-// const credentials = new Headers({
-//     'Authorization': 'Basic ' + btoa(`${username}:${passwordd}`),
-//   });
 
 export async function getCalibreItems(search_input: string): Promise<void> {
     const calibreLibrary = logseq.settings?.calibreLibrary.replace(/ /g, '_');
-    const fetch_link = `${logseq.settings?.serverLink}/ajax/books/${calibreLibrary}`; 
-    //  ADD A CHECK HERE and show msg if two // detects
+    let fetch_link = `${logseq.settings?.serverLink}/ajax/books/${calibreLibrary}`;
+  
+    // Check for double slashes in the URL (excluding the `http://` or `https://` part)
+    const client = new DigestClient(logseq.settings?.username, logseq.settings?.password);
+    fetch_link = fetch_link.replace(/([^:]\/)\/+/g, '$1');
+  
     console.log(fetch_link);
   
     try {
-      const response = await fetch(fetch_link);
-      if (!response.ok) {
+        const response = await client.fetch(fetch_link);
+        // const response = await client.fetch(fetch_link);
+  
+    if (!response.ok) {
         logseq.UI.showMsg("Request to Calibre Content Server failed.", "error");
         console.log(response);
         return;
-      }
+    }
   
-      const data = await response.json();
-      const books: CalibreItem[] = Object.values(data);
-      const options = {
+    const data = await response.json();
+    const books: CalibreItem[] = Object.values(data);
+    const options = {
         threshold: 0.2,
         keys: ["title", "authors"],
         distance: 1000,
       };
-      const fuse = new Fuse<CalibreItem>(books, options);
-      const search_results: Fuse.FuseResult<CalibreItem>[] = fuse.search(search_input);
+    const fuse = new Fuse<CalibreItem>(books, options);
+    const search_results: Fuse.FuseResult<CalibreItem>[] = fuse.search(search_input);
   
-      searchCalibreItems(search_results);
+    searchCalibreItems(search_results);
     } catch (error) {
-      console.error('Fetch or other error:', error);
-      logseq.UI.showMsg("calibreMetadata: Fail to fetch from Calibre API. Make sure to start the Content Server.", "error");
+        console.error('Fetch or other error:', error);
+        logseq.UI.showMsg("calibreMetadata: Fail to fetch from Calibre API. Make sure to start the Content Server.", "error");
     }
   }
 
@@ -289,40 +286,6 @@ async function create(page_title, page_properties, calibre_item) {
 
 }
 
-
-
-// const main = () => {
-  
-//     document.addEventListener("click", function (e) {
-//         if (!e.target.closest("div")) {
-//             exitSearch();
-//         }
-//     });
-
-//     // use the escape key to hide the plugin UI
-//     document.addEventListener("keydown", function (e) {
-//         if (e.key == "Escape") {
-//             exitSearch();
-//         }
-//     });
-
-//     logseq.setMainUIInlineStyle({
-        // position: "absolute",
-        // backgroundColor: "transparent",
-        // top: "2.5em",
-        // boxSizing: "border-box",
-        // display: "flex",
-        // flexDirection: "column",
-        // gap: "0.5em",
-        // width: "100vw",
-        // height: "100vh",
-        // overflow: "auto",
-        // zIndex: 100
-//     });
-
-// }
-
-// logseq.ready(main).catch(console.error);
 
 interface CalibreItem {
     application_id: string;

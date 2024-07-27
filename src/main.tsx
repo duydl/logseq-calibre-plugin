@@ -1,4 +1,4 @@
-import "@logseq/libs"
+import '@logseq/libs'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Viewer from './Viewer'
@@ -7,30 +7,44 @@ import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 
 const settings: SettingSchemaDesc[] = [
     {
+      key: "pageHeading",
+      title: "📄 Viewer Settings",
+      description: "",
+      type: "heading",
+      default: null
+    },
+    {
       key: "viewerWidth",
       title: "Adjust viewer width ",
       type: "number",
       default: 40,
-      description: 'Value in percentage. Must reopen viewer for change to take effect. Your reading position will be remembered if using Open button. More interactive option will be added in later date.'
+      description: "Value in percentage. Must reopen viewer for change to take effect. Your reading position will be remembered if using Open button. More interactive option will be added in later date."
+    },
+    {
+      key: "pageHeading",
+      title: "📄 Metadata Settings",
+      description: "",
+      type: "heading",
+      default: null
     },
     {
       key: "calibreLibrary",
-      title: "Preferred Calibre Library",
-      description: "Set your preferred Calibre library location.",
+      title: "Calibre Library",
+      description: "Set preferred Calibre library location.",
       type: "string",
       default: ""
   },
   {
       key: "addBlockInstead",
       title: "Add block instead of page",
-      description: "Add a new block at cursor instead of line to new page",
+      description: "Add as block at cursor instead of link to new page",
       type: "boolean",
       default: false
   },
   {
       key: "serverLink",
       title: "Content Server Link",
-      description: "Specify the link to your content server. The default is localhost:8080, but change it if you use a different port or domain. <br>Add the link WITHOUT the extra /; otherwise it could result in error. <br>If update to library isn't registered, use the link for local home network device i.e the one displayed when clicking on Connect/share in Calibre to avoid the cache problem.",
+      description: "Specify the link to your content server. The default is localhost:8080.",
       type: "string",
       default: "http://localhost:8080"
   },
@@ -44,16 +58,37 @@ const settings: SettingSchemaDesc[] = [
   {
       key: "pageProperties",
       title: "Page Properties",
-      description: "Select the properties i.e metadata to be included in the new Calibre page. Note that the rating property currently returns an error. The default metadata is 'tags, isbn, date, publisher, language, authors, format'.",
+      description: "Select the properties i.e metadata to be included. The default metadata is 'tags, isbn, date, publisher, language, authors, format'. ⚠ The rating property currently returns an error. ",
       type: "string",
       default: "tags, isbn, date, publisher, language, authors, format"
   },
   {
       key: "bookFormat",
-      title: "Preferred Book Format for Renderers",
-      description: "Choose your preferred book format for Viewer Macro and Sync Macro. The default is epub.",
+      title: "Preferred Book Format to Open",
+      description: "Choose preferred book format for Viewer Macro and Sync Macro. The default is epub.",
       type: "string",
       default: "epub"
+  },
+  {
+    key: "pageHeading",
+    title: "📄 Authentications",
+    description: "⚠ Apply when authentication is required for Content Server.",
+    type: "heading",
+    default: null
+  },
+  {
+    key: "username",
+    title: "Username",
+    type: "string",
+    description: "",
+    default: null
+  },
+  {
+    key: "password",
+    title: "Password",
+    type: "string",
+    description: "⚠",
+    default: null
   },
 ];
 
@@ -161,7 +196,6 @@ async function main() {
       // logseq.App.setRightSidebarVisible(true)
       renderViewer(srcLink)
       logseq.provideStyle({
-        // key: 'content-widen-mode', // Not providing key would reset style
         style: `
         #logseq-calibre-annotation_lsp_main {
           position: fixed ;

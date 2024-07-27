@@ -12,7 +12,8 @@
   },
   "author": "duydl",
   "dependencies": {
-    "@logseq/libs": "^0.0.6",
+    "@logseq/libs": "0.0.14",
+    "digest-fetch": "^3.1.1",
     "driftless": "^2.0.3",
     "fuse.js": "^6.6.2",
     "react": "^17.0.2",
