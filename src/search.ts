@@ -145,7 +145,7 @@ function searchCalibreItems(search_results) {
     }
     
     else if ((search_results.length == 0) && (search_bar.value != "")) {
-        // Not found
+        // Not Found
         search_result_container = document.createElement("li");
         search_result_title_container = document.createElement("div");
         search_result_title = document.createTextNode("Not found");

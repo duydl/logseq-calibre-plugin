@@ -34,7 +34,8 @@
   background-color: transparent;
   width: 30px; 
   height: 100%;
-  padding-right: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,8 +48,9 @@
 .drag-button{
   background-color: transparent;
   width: 30px; 
-  height: 80%;
-  padding: 10px;
+  height: 100%;
+  padding-right: 5px;
+  padding-left: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
