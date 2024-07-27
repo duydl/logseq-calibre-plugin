@@ -1,3 +1,20 @@
+# [1.3.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.2.0...v1.3.0) (2024-07-27)
+
+
+### Bug Fixes
+
+* adjust viewer height and bar loc ([a2ab49d](https://github.com/duydl/logseq-calibre-annotation/commit/a2ab49da367a84fdc213e65d4f14d1a592ee9720))
+* Imrove UI ([cfb096d](https://github.com/duydl/logseq-calibre-annotation/commit/cfb096d2bbce277b95b8ccf538ff5f478deb951c))
+* Library name with <space> lead to error ([c12fa25](https://github.com/duydl/logseq-calibre-annotation/commit/c12fa25a75678804e5b7e7cb89a5e3b939a540cd))
+* Style of util bar in Viewer ([ae591c3](https://github.com/duydl/logseq-calibre-annotation/commit/ae591c30e2b286afdda7689318e385bf125a8d28))
+
+
+### Features
+
+* Allow authentication with username and password ([516bc60](https://github.com/duydl/logseq-calibre-annotation/commit/516bc601a673ab3f05725ef498b0f9357f2d3d4c))
+* finish draft of migration ([0169d69](https://github.com/duydl/logseq-calibre-annotation/commit/0169d69e3b3e1856b8636a9d04db93e6055f9d56))
+* Migrate calibre-metadata to calibre-annotate ([a6b6ebe](https://github.com/duydl/logseq-calibre-annotation/commit/a6b6ebe85168d43788246b11d9075a21a3ddb952))
+
 ## [1.2.1](https://github.com/duydl/logseq-calibre-annotation/compare/v1.2.0...v1.2.1) (2023-10-30)
 
 
