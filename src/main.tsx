@@ -1,9 +1,11 @@
 import '@logseq/libs'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import DigestClient from "digest-fetch";
 import Viewer from './Viewer'
 import SearchBar from './SearchBar'
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
+
 
 const settings: SettingSchemaDesc[] = [
     {
@@ -120,7 +122,7 @@ async function main() {
         </a>`
   });
 
-  // 0. Metadata 
+  // Metadata //
   // Slash Command
   logseq.Editor.registerSlashCommand("Calibre Annotation: Add a Calibre book", async () => {
     if (!logseq.settings?.calibreLibrary) {
@@ -151,7 +153,7 @@ async function main() {
     search_bar.focus();
   });
       
-  // 1. MacroRenderer and Model for Viewer Component //
+  // MacroRenderer and Model for Viewer Component //
 
   logseq.App.onMacroRendererSlotted(({ slot, payload }) => {
     const [type, color, link] = payload.arguments
@@ -215,7 +217,7 @@ async function main() {
     },
   });
 
-  // 2. MacroRenderer and Model for Sync Component //
+  // MacroRenderer and Model for Sync Component //
 
   logseq.App.onMacroRendererSlotted(({ slot, payload }) => {
     const [type, syncstate, interval, hostlink, lib, id, fmt] = payload.arguments
@@ -282,7 +284,7 @@ async function main() {
 
 };
 
-// 3. Methods for periodically syncing annotations from Calibre to Logseq // 
+// Methods for Syncing Annotations from Calibre to Logseq // 
 
 let intervalId; // Variable to store the interval ID. // Globally defined // Only one book syncing at a time
 
@@ -315,9 +317,13 @@ async function fetchUpdate(blockUuid, hostLink, bookId) {
 
   const lastSync = lastTimestamp ? 
     new Date(lastTimestamp) : new Date(0); // Initialize to the smallest possible date
-    console.log(hostLink + "/book-get-annotations/" + bookId)
-  const response = await fetch(hostLink + "/book-get-annotations/" + bookId);
-  const data = await response.json() as FetchResponse;
+    
+  console.log(hostLink + "/book-get-annotations/" + bookId);
+
+  const client = new DigestClient(logseq.settings?.username, logseq.settings?.password);
+
+  const response = await client.fetch(hostLink + "/book-get-annotations/" + bookId);
+  const data = await response.json();
   
   const annotations = Object.values(data)[0].annotations_map.highlight;
 

@@ -4,20 +4,30 @@ import './Viewer.css'
 
 const Viewer: React.FC<{ srcLink: string}> = ({ srcLink}) => {
 
+  const urlObj = new URL(srcLink);
+  const protocol = urlObj.protocol;
+  const host = urlObj.host;
+  const pathname = urlObj.pathname;
+  const search = urlObj.search;
+  const hash = urlObj.hash;
+
+  const username = logseq.settings?.username
+  const password = logseq.settings?.password
+  const authUrl = `${protocol}//${username}:${password}@${host}${pathname}${search}${hash}`;
+
   return (
     <>
     <ButtonContainer srcLink={srcLink}/>
+    {/* <iframe title="epub" className="iframe" src={authUrl} allowFullScreen></iframe> */}
     <iframe title="epub" className="iframe" src={srcLink} allowFullScreen></iframe>
     </>
   );
 }
 
-
 const ButtonContainer: React.FC<{ srcLink: string}> = ({ srcLink}) => {
 
   const hide = () => {
     logseq.provideStyle({
-      // key: 'content-widen-mode', // Not providing key would reset style
       style: `
       #app-container {
         width: 100% ;
