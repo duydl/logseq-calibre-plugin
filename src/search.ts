@@ -2,9 +2,7 @@
 import "@logseq/libs";
 import Fuse from "fuse.js";
 
-
-
- // Typing timer can be a number or undefined
+// Typing timer can be a number or undefined
 
 
 // const username = '';
@@ -15,7 +13,9 @@ import Fuse from "fuse.js";
 //   });
 
 export async function getCalibreItems(search_input: string): Promise<void> {
-    const fetch_link = `${logseq.settings?.serverLink}/ajax/books/${logseq.settings?.calibreLibrary}`;
+    const calibreLibrary = logseq.settings?.calibreLibrary.replace(/ /g, '_');
+    const fetch_link = `${logseq.settings?.serverLink}/ajax/books/${calibreLibrary}`; 
+    //  ADD A CHECK HERE and show msg if two // detects
     console.log(fetch_link);
   
     try {
@@ -42,7 +42,6 @@ export async function getCalibreItems(search_input: string): Promise<void> {
       logseq.UI.showMsg("calibreMetadata: Fail to fetch from Calibre API. Make sure to start the Content Server.", "error");
     }
   }
-  
 
 
 function setAttributes(element, attrs) {
@@ -55,9 +54,16 @@ export function exitSearch() {
     search_bar.value = "";
     search_bar.blur();
     clearSearchResults();
-
+    logseq.provideStyle({
+        style: `
+        #app-container {
+          width: 100% ;
+        }
+        `,
+      })
     logseq.hideMainUI();
 }
+
 export function clearSearchResults() {
     let search_results_item_container: HTMLElement = document.getElementById("search-results") as HTMLElement;
     if (search_results_item_container.children.length > 0) {
@@ -219,7 +225,7 @@ function createCalibrePage(item) {
 
             case "format":
             property_value = Object.entries(calibre_item.format_metadata)
-            .map(([ext, obj]) => `[${ext}](${obj.path})`)
+            .map(([ext, obj]) => `[${ext}](${obj?.path})`)
             .join(', ');
             break;
 
@@ -256,9 +262,9 @@ async function create(page_title, page_properties, calibre_item) {
 
         await logseq.Editor.insertBlock(synopsisBlock.uuid, calibre_item?.comments? calibre_item?.comments : "");
         
-
+        const calibreLibrary = logseq.settings?.calibreLibrary.replace(/ /g, '_');
         // Append two MacroRenderers for View and Sync in calibre-annotation Plugin
-        await logseq.Editor.insertBlock(newBlock.uuid, `[${calibre_item.title}](calibre://show-book/${logseq.settings?.calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, ${logseq.settings?.serverLink}/#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${logseq.settings?.calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, ${logseq.settings?.serverLink}, ${logseq.settings?.calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
+        await logseq.Editor.insertBlock(newBlock.uuid, `[${calibre_item.title}](calibre://show-book/${calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, ${logseq.settings?.serverLink}/#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, ${logseq.settings?.serverLink}, ${calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
     }
     else {
         const newPage = await logseq.Editor.createPage(page_title, page_properties, {
@@ -277,7 +283,8 @@ async function create(page_title, page_properties, calibre_item) {
         await logseq.Editor.insertBlock(synopsisBlock.uuid, calibre_item?.comments? calibre_item?.comments : "");
 
         // Append two MacroRenderers for View and Sync in calibre-annotation Plugin
-        await logseq.Editor.prependBlockInPage(newPage?.uuid, `[${calibre_item.title}](calibre://show-book/${logseq.settings?.calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, ${logseq.settings?.serverLink}/#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${logseq.settings?.calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, ${logseq.settings?.serverLink}, ${logseq.settings?.calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
+        const calibreLibrary = logseq.settings?.calibreLibrary.replace(/ /g, '_');
+        await logseq.Editor.prependBlockInPage(newPage?.uuid, `[${calibre_item.title}](calibre://show-book/${calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, ${logseq.settings?.serverLink}/#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, ${logseq.settings?.serverLink}, ${calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
     }
 
 }
