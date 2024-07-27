@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/duydl/logseq-calibre-annotation/compare/v1.3.0...v1.3.1) (2024-07-27)
+
+
+### Bug Fixes
+
+* Fix sync when authen is required ([63c9ea1](https://github.com/duydl/logseq-calibre-annotation/commit/63c9ea114e0705903d28e3c4741e9674cdff6ea4))
+
 # [1.3.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.2.0...v1.3.0) (2024-07-27)
 
 
