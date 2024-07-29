@@ -74,9 +74,16 @@ const settings: SettingSchemaDesc[] = [
   {
     key: "pageHeading",
     title: "📄 Authentications",
-    description: "⚠ Apply when authentication is required for Content Server.",
+    description: "⚠ Apply when authentication is required for Content Server. Currently opening viewer in Logseq sidebar is not supported when login is required.",
     type: "heading",
     default: null
+  },
+  {
+    key: "openInBrowser",
+    title: "Open Book and Annotation in Browser",
+    description: "Enable to open book in browser (also apply when login not required)",
+    type: "boolean",
+    default: false
   },
   {
     key: "username",
@@ -92,6 +99,7 @@ const settings: SettingSchemaDesc[] = [
     description: "⚠",
     default: null
   },
+
 ];
 
 async function main() {
@@ -194,25 +202,32 @@ async function main() {
     showViewer(e) {
       // console.log(document.getElementById("right-sidebar"))
       let srcLink = e.dataset.srcLink
+
+      if (logseq.settings?.openInBrowser) {
+        openUrl(srcLink)
+      }
+      else {
       // let blockUuid = e.dataset.blockUuid
       // logseq.App.setRightSidebarVisible(true)
-      renderViewer(srcLink)
-      logseq.provideStyle({
-        style: `
-        #logseq-calibre-annotation_lsp_main {
-          position: fixed ;
-          top: 3rem ;
-          left: ${100 - logseq.settings?.viewerWidth}% ;
-          width: ${logseq.settings?.viewerWidth}%;
-          height: calc(100% - 3rem) ;
-          z-index: 9;
-        }
-        #app-container {
-          width: ${100 - logseq.settings?.viewerWidth}% ;
-        }
-        ` ,
-      })
-      logseq.showMainUI()
+        renderViewer(srcLink)
+        
+        logseq.provideStyle({
+          style: `
+          #logseq-calibre-annotation_lsp_main {
+            position: fixed ;
+            top: 3rem ;
+            left: ${100 - logseq.settings?.viewerWidth}% ;
+            width: ${logseq.settings?.viewerWidth}%;
+            height: calc(100% - 3rem) ;
+            z-index: 9;
+          }
+          #app-container {
+            width: ${100 - logseq.settings?.viewerWidth}% ;
+          }
+          ` ,
+        })
+        logseq.showMainUI()
+      }
 
     },
   });
@@ -372,6 +387,20 @@ function makeBlock(jsonObject, hostLink, lib, id, fmt) {
   return markdownString;
 }
 
+function openUrl(url) {
+  // Create a new anchor element
+  const a = document.createElement('a');
+  a.href = url;
+  
+  // Set the target attribute to '_blank' to open the URL in new tab
+  a.target = '_blank';
+  document.body.appendChild(a);
+  
+  // Simulate a click on the anchor element
+  a.click();
+
+  document.body.removeChild(a);
+}
 
 function renderViewer(srcLink: string) {
   ReactDOM.render(
