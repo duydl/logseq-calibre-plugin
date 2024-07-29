@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.3.1...v1.4.0) (2024-07-29)
+
+
+### Features
+
+* Add setting option to open book in browser ([e1de2f7](https://github.com/duydl/logseq-calibre-annotation/commit/e1de2f728d6e6f3e12752ade1354cc73c56796cc))
+
 ## [1.3.1](https://github.com/duydl/logseq-calibre-annotation/compare/v1.3.0...v1.3.1) (2024-07-27)
 
 
