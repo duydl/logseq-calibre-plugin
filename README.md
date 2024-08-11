@@ -1,5 +1,6 @@
 ☕ [Support my work](https://www.buymeacoffee.com/duydole00) if you find this helpful!
 
+
 # Logseq Calibre Annotation
 
 > Now also with features from [`calibreMetadata`](https://github.com/duydl/logseq-calibre-metadata).
@@ -7,6 +8,19 @@
 Enhance your note-taking experience with Logseq by integrating with [Calibre](https://calibre-ebook.com/), a robust e-book management software, by leveraging Calibre's Content Server API.
 
 - **Calibre Content Server** is a convenient tool for reading e-books in browsers and syncing reading progress and annotations across devices. Now, book metadata and annotations from Calibre can seamlessly sync to your Logseq graph.
+
+**Table of Content**
+- [Usage](#usage)
+  - [1. Adding Books](#1-adding-books)
+  - [2. Opening Viewer](#2-opening-viewer)
+  - [3. Syncing Annotations](#3-syncing-annotations)
+  - [4. Authentication for User Login](#4-authentication-for-user-login)
+  - [5. Additional Tips](#5-additional-tips)
+- [Demo](#demo)
+  - [Import Books](#import-books)
+  - [Viewing and Syncing](#viewing-and-syncing)
+  - [Copy Individual Annotations](#copy-individual-annotations)
+- [Contribution](#contribution)
 
 ## Usage
 
@@ -67,7 +81,7 @@ You can configure the authentication settings of the plugin as follows:
     3. In the **Template for citing highlighted text**, add the following:
 
         ```plaintext
-        {{{{renderer calibreViewer, {style_kind}, {url}}}}} {text} 
+        {{{{renderer calibreViewer, {style_which}, {url}}}}} {text} 
         {notes}
         ```
 
@@ -114,6 +128,17 @@ You can configure the authentication settings of the plugin as follows:
   </tr>
   <tr>
     <td align="center"><strong>Viewing Book and Syncing Annotations</strong></td>
+  </tr>
+</table>
+
+### Copy Individual Annotations
+
+<table align="center" style="width: auto; margin: 0 auto;">
+  <tr>
+    <td align="center"><img src="screenshots/demo4.gif" alt="Copy Individual Annotations from Viewer" style="width: 60%;"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Copy Individual Annotations from Viewer</strong></td>
   </tr>
 </table>
 
