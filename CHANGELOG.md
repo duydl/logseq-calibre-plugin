@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/duydl/logseq-calibre-annotation/compare/v1.5.0...v1.5.1) (2024-08-11)
+
+
+### Bug Fixes
+
+* Update README and reorganize setting options ([3e22cdf](https://github.com/duydl/logseq-calibre-annotation/commit/3e22cdfee13ed4ba5b8cb6115e71163353e25ba8))
+
 # [1.5.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.4.0...v1.5.0) (2024-08-11)
 
 
