@@ -51,7 +51,7 @@ When sharing a Calibre library with different users over a LAN or WAN, authentic
 You can configure the authentication settings of the plugin as follows:
 
 - **Username**: Set the username for login.
-- **Password**: Set the password for login. ⚠ Ensure your password is securely stored.
+- **Password**: Set the password for login.
 - **Open in Browser**: The sidebar viewer within Logseq does not support scenarios where login is required. Enable this option to open books and annotations in your browser instead of within Logseq.
 
 
@@ -82,11 +82,41 @@ You can configure the authentication settings of the plugin as follows:
   - Find the LAN address of the Content Server to access it from devices other than the host.
   - Add users for managing profiles.
   
-- **Annotate Webpages:** Save webpages as ePubs and import them into Calibre using tools like [Save as eBook](https://github.com/alexadam/save-as-ebook) or [Shiori](https://github.com/go-shiori/shiori).
+- **Annotate Webpages:** Save webpages as ePubs and import them into Calibre using tools like [Save as eBook](https://github.com/alexadam/save-as-ebook) Chrome Extension or [Shiori](https://github.com/go-shiori/shiori).
 
 ## Demo
 
 <!-- Add GIFs to showcase plugin features -->
+### Import Books
+
+<table align="center" style="width: auto; margin: 0 auto;">
+  <tr>
+    <td align="center"><img src="screenshots/demo1.gif" alt="Import as Block" style="width: 60%;"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Import as Block</strong></td>
+  </tr>
+</table>
+<table align="center" style="width: auto; margin: 0 auto;">
+  <tr>
+    <td align="center"><img src="screenshots/demo2.gif" alt="Import as Page" style="width: 60%;"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Import as Page</strong></td>
+  </tr>
+</table>
+
+### Viewing and Syncing
+
+<table align="center" style="width: auto; margin: 0 auto;">
+  <tr>
+    <td align="center"><img src="screenshots/demo3.gif" alt="Viewing Book and Syncing Annotations" style="width: 60%;"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Viewing Book and Syncing Annotations</strong></td>
+  </tr>
+</table>
+
 
 ## Contribution
 
