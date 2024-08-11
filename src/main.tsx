@@ -165,6 +165,11 @@ async function main() {
 
   logseq.App.onMacroRendererSlotted(({ slot, payload }) => {
     const [type, color, link] = payload.arguments
+    const path =  extractPath(link); // tobe compatible with both old full path and new relative path
+    let hostLink = logseq.settings?.serverLink
+    // hostLink = hostLink.endsWith("/") ? hostLink.slice(0, -1) : hostLink;
+    hostLink = hostLink.replace(/\/$/, '')
+
     if (type == "calibreViewer") {
       // Button to Open Book 
       if (color == "special") { 
@@ -173,7 +178,7 @@ async function main() {
           slot, 
           template: `<button
           data-on-click="showViewer"
-          data-src-link="${link}"
+          data-src-link="${hostLink + path}"
           data-slot-id="${slot}"
           data-block-uuid="${payload.uuid}"
           class="ui__button text-center px-1 py-0 "
@@ -187,7 +192,7 @@ async function main() {
             slot, 
             template: `<button
             data-on-click="showViewer"
-            data-src-link="${link}"
+            data-src-link="${hostLink + path}"
             data-slot-id="${slot}"
             data-block-uuid="${payload.uuid}"
             class="button"
@@ -235,7 +240,7 @@ async function main() {
   // MacroRenderer and Model for Sync Component //
 
   logseq.App.onMacroRendererSlotted(({ slot, payload }) => {
-    const [type, syncstate, interval, hostlink, lib, id, fmt] = payload.arguments
+    const [type, syncstate, interval, hostlink_deprecated, lib, id, fmt] = payload.arguments
     if (type == "calibreHighlight") {
       if (syncstate == "false") {
         return logseq.provideUI({
@@ -244,7 +249,7 @@ async function main() {
             template: `<button
               data-on-click="update_syncstate"
               data-sync-interval="${interval}"
-              data-host-link="${hostlink}"
+              data-host-link="_"
               data-book-id="${lib}/${id}-${fmt}"
               data-sync-state="false"
               data-slot-id="${slot}"
@@ -288,7 +293,7 @@ async function main() {
         newContent = block?.content?.replace(`${flag}`,
           `{{renderer calibreHighlight, true,`);
         const syncInterval = e.dataset.syncInterval
-        startSyncing(blockUuid, e.dataset.hostLink, e.dataset.bookId, syncInterval)
+        startSyncing(blockUuid, e.dataset.bookId, syncInterval)
       }
 
       if (!newContent) return
@@ -303,9 +308,11 @@ async function main() {
 
 let intervalId; // Variable to store the interval ID. // Globally defined // Only one book syncing at a time
 
-async function startSyncing(blockUuid, hostLink, bookId, syncInterval) {
+async function startSyncing(blockUuid, bookId, syncInterval) {
   // Clear any existing interval (if there is one)
   clearInterval(intervalId);
+  let hostLink = logseq.settings?.serverLink
+  hostLink = hostLink.replace(/\/$/, '')
   // Set the new interval
   intervalId = setInterval(async () => {
     await fetchUpdate(blockUuid, hostLink, bookId);
@@ -353,7 +360,7 @@ async function fetchUpdate(blockUuid, hostLink, bookId) {
 
   
   filtered_annotations.forEach(element => {
-    logseq.Editor.insertBlock(blockUuid, makeBlock(element, hostLink, lib, id, format), {
+    logseq.Editor.insertBlock(blockUuid, makeBlock(element, lib, id, format), {
       isPageBlock: false,
     });
   });
@@ -365,7 +372,7 @@ async function fetchUpdate(blockUuid, hostLink, bookId) {
   }
 }
 
-function makeBlock(jsonObject, hostLink, lib, id, fmt) {
+function makeBlock(jsonObject, lib, id, fmt) {
   const {
     highlighted_text,
     timestamp,
@@ -382,7 +389,7 @@ function makeBlock(jsonObject, hostLink, lib, id, fmt) {
   style.kind == "color" && style.type == "builtin" ? color = style.which : color = "white";
   const note_add = notes ? "\n" + notes : "";
 
-  const markdownString = `{{renderer calibreViewer, ${color}, ${hostLink}/#book_id=${id}&bookpos=epubcfi%28/${(spine_index+1)*2}${start_cfi}%29&fmt=${fmt}&library_id=${lib}&mode=read_book }} ${highlighted_text}${note_add}`;
+  const markdownString = `{{renderer calibreViewer, ${color}, /#book_id=${id}&bookpos=epubcfi%28/${(spine_index+1)*2}${start_cfi}%29&fmt=${fmt}&library_id=${lib}&mode=read_book }} ${highlighted_text}${note_add}`;
 
   return markdownString;
 }
@@ -422,5 +429,17 @@ function renderSearchbar() {
   logseq.showMainUI()
 }
 
+function extractPath(url) {
+  try {
+      // Attempt to create a new URL object from the input string
+      let parsedUrl = new URL(url);
+      // If successful, return the path including pathname, search, and hash
+      return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+  } catch (error) {
+      // If the URL constructor throws an error, it means the input was not a full URL
+      // In that case, return the original input string unchanged
+      return url;
+  }
+}
 
 logseq.useSettingsSchema(settings).ready(main).catch(console.error)

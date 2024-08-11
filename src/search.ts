@@ -261,7 +261,7 @@ async function create(page_title, page_properties, calibre_item) {
         
         const calibreLibrary = logseq.settings?.calibreLibrary.replace(/ /g, '_');
         // Append two MacroRenderers for View and Sync in calibre-annotation Plugin
-        await logseq.Editor.insertBlock(newBlock.uuid, `[${calibre_item.title}](calibre://show-book/${calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, ${logseq.settings?.serverLink}/#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, ${logseq.settings?.serverLink}, ${calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
+        await logseq.Editor.insertBlock(newBlock.uuid, `[${calibre_item.title}](calibre://show-book/${calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, /#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, _, ${calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
     }
     else {
         const newPage = await logseq.Editor.createPage(page_title, page_properties, {
@@ -281,7 +281,7 @@ async function create(page_title, page_properties, calibre_item) {
 
         // Append two MacroRenderers for View and Sync in calibre-annotation Plugin
         const calibreLibrary = logseq.settings?.calibreLibrary.replace(/ /g, '_');
-        await logseq.Editor.prependBlockInPage(newPage?.uuid, `[${calibre_item.title}](calibre://show-book/${calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, ${logseq.settings?.serverLink}/#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, ${logseq.settings?.serverLink}, ${calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
+        await logseq.Editor.prependBlockInPage(newPage?.uuid, `[${calibre_item.title}](calibre://show-book/${calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, /#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, _, ${calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
     }
 
 }
