@@ -2,7 +2,7 @@
 
 # Logseq Calibre Annotation
 
-> Now integrated with [`calibreMetadata`](https://github.com/duydl/logseq-calibre-metadata).
+> Now also with features from [`calibreMetadata`](https://github.com/duydl/logseq-calibre-metadata).
 
 Enhance your note-taking experience with Logseq by integrating with [Calibre](https://calibre-ebook.com/), a robust e-book management software, by leveraging Calibre's Content Server API.
 
@@ -16,7 +16,7 @@ Additionally, the plugin provides two macro renderers:
 - **Calibre Viewer (`calibreViewer`)**: Opens the book at the current progress location or annotation location.
 - **Calibre Sync (`calibreSync`)**: Toggles real-time annotation syncing from Calibre to a designated block.
 
-Multiple settings customize the behavior of these features. The **Content Server Link** setting applies to all functions and specifies the URL where the Calibre Content Server is hosted. This URL is typically the loopback address followed by a port number (e.g., http://localhost:8080) but can also be a LAN or WAN address.
+Multiple settings customize the behavior of these features. The **Content Server Link** setting applies to all functions and specifies the URL where the Calibre Content Server is hosted. This URL would typically be set to the loopback address followed by a port number (e.g., `http://localhost:8080`) but can also be a LAN or WAN address.
 
 ### 1. Adding Books
 
@@ -46,7 +46,9 @@ This renderer is also automatically added when a book is imported. The values of
 
 ### 4. Authentication for User Login
 
-When sharing a Calibre library with different users over a LAN or WAN, authentication may be required to manage separate profiles. You can configure the authentication settings as follows:
+When sharing a Calibre library with different users over a LAN or WAN, authentication may be required to manage separate profiles. 
+
+You can configure the authentication settings of the plugin as follows:
 
 - **Username**: Set the username for login.
 - **Password**: Set the password for login. ⚠ Ensure your password is securely stored.
@@ -58,18 +60,27 @@ When sharing a Calibre library with different users over a LAN or WAN, authentic
 
 - **Copy Individual Annotations from Viewer:** Annotations in Calibre can be directly copied from the viewer and pasted into Logseq when needed.
 
-To enable this feature in Calibre:
+    To enable this feature in Calibre:
 
-1. Go to **Calibre e-Book Viewer** > **Preferences** > **Selection Behavior**.
-2. Enable the option for **Citation Action** (Copy a citation to this text).
-3. In the **Template for citing highlighted text**, add the following:
+    1. Go to **Calibre e-Book Viewer** > **Preferences** > **Selection Behavior**.
+    2. Enable the option for **Citation Action** (Copy a citation to this text).
+    3. In the **Template for citing highlighted text**, add the following:
 
-    ```plaintext
-    {{{{renderer calibreViewer, {style_kind}, {url}}}}} {text} 
-    {notes}
-    ```
+        ```plaintext
+        {{{{renderer calibreViewer, {style_kind}, {url}}}}} {text} 
+        {notes}
+        ```
 
-For more details on copying annotations from Calibre to Logseq, refer to [this issue discussion](https://github.com/duydl/logseq-calibre-annotation/issues/8#issuecomment-2046574914) and other links referenced there.
+    For more details on copying annotations from Calibre to Logseq, refer to [this issue discussion](https://github.com/duydl/logseq-calibre-annotation/issues/8#issuecomment-2046574914) and other links referenced there.
+  
+- **Adjusting Content Server Settings:**
+
+  Navigate to **Calibre** > **Preferences** > **Sharing over the Net** to configure your Content Server settings. You can:
+
+  - Select the option to automatically start the Content Server when Calibre is launched.
+  - Adjust the port number for the Content Server.
+  - Find the LAN address of the Content Server to access it from devices other than the host.
+  - Add users for managing profiles.
   
 - **Annotate Webpages:** Save webpages as ePubs and import them into Calibre using tools like [Save as eBook](https://github.com/alexadam/save-as-ebook) or [Shiori](https://github.com/go-shiori/shiori).
 
