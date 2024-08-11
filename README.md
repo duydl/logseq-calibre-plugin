@@ -2,19 +2,6 @@
 
 # Logseq Calibre Annotation
 
-> Now incorporated with [`calibreMetadata`](https://github.com/duydl/logseq-calibre-metadata).
-
-Enhance note-taking experience with Logseq by integrating with [Calibre](https://calibre-ebook.com/), a robust e-book management software, by leveraging Calibre's Content Server API.
-
-- **Calibre Content Server** is a convenient tool for reading in browsers as well as syncing progress and annotations between devices. Now, book metadata and annotations from Calibre can seamlessly sync to Logseq graph.
- Here’s the revised README with the integrated information:
-
----
-
-☕ [Support my work](https://www.buymeacoffee.com/duydole00) if you find this helpful!
-
-# Logseq Calibre Annotation
-
 > Now integrated with [`calibreMetadata`](https://github.com/duydl/logseq-calibre-metadata).
 
 Enhance your note-taking experience with Logseq by integrating with [Calibre](https://calibre-ebook.com/), a robust e-book management software, by leveraging Calibre's Content Server API.
