@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.4.0...v1.5.0) (2024-08-11)
+
+
+### Features
+
+* Make marco renderer buttons adjusted flexibly to change in host domain ([1734781](https://github.com/duydl/logseq-calibre-annotation/commit/1734781b55b7638cb28b30013cf93067afad7a69))
+
 # [1.4.0](https://github.com/duydl/logseq-calibre-annotation/compare/v1.3.1...v1.4.0) (2024-07-29)
 
 
