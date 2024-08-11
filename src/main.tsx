@@ -10,6 +10,20 @@ import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 const settings: SettingSchemaDesc[] = [
     {
       key: "pageHeading",
+      title: "📄 General",
+      description: "",
+      type: "heading",
+      default: null
+    },
+    {
+      key: "serverLink",
+      title: "Content Server Link",
+      description: "Specify the link to your content server. The default is localhost:8080.",
+      type: "string",
+      default: "http://localhost:8080"
+    },
+    {
+      key: "pageHeading",
       title: "📄 Viewer Settings",
       description: "",
       type: "heading",
@@ -32,9 +46,9 @@ const settings: SettingSchemaDesc[] = [
     {
       key: "calibreLibrary",
       title: "Calibre Library",
-      description: "Set preferred Calibre library location.",
+      description: "Set preferred Calibre library name search for books.",
       type: "string",
-      default: ""
+      default: "Calibre_Library"
   },
   {
       key: "addBlockInstead",
@@ -42,13 +56,6 @@ const settings: SettingSchemaDesc[] = [
       description: "Add as block at cursor instead of link to new page",
       type: "boolean",
       default: false
-  },
-  {
-      key: "serverLink",
-      title: "Content Server Link",
-      description: "Specify the link to your content server. The default is localhost:8080.",
-      type: "string",
-      default: "http://localhost:8080"
   },
   {
       key: "pageTitleTemplate",
