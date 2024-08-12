@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/duydl/logseq-calibre-annotation/compare/v1.5.2...v1.5.3) (2024-08-12)
+
+
+### Bug Fixes
+
+* Remove cache when fetching books list ([1cc2ac9](https://github.com/duydl/logseq-calibre-annotation/commit/1cc2ac9c5fe3d22c6054c70bb041d10c7db18e1a))
+
 ## [1.5.2](https://github.com/duydl/logseq-calibre-annotation/compare/v1.5.1...v1.5.2) (2024-08-12)
 
 

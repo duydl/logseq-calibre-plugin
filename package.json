@@ -1,6 +1,6 @@
 {
   "name": "logseq-calibre-annotation",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "View ebooks from Calibre and sync annotations",
   "main": "dist/index.html",
   "targets": {
