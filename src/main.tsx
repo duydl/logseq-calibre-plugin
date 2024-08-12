@@ -46,7 +46,7 @@ const settings: SettingSchemaDesc[] = [
     {
       key: "calibreLibrary",
       title: "Calibre Library",
-      description: "Set preferred Calibre library name search for books.",
+      description: "Specify your preferred Calibre library ID to search for books, which appears in URL like `http://[::1]:8080/#library_id=Calibre&panel=book_list` when browsing. Most of the time it is just he library name.",
       type: "string",
       default: "Calibre_Library"
   },

@@ -38,7 +38,7 @@ Use the slash command, `Calibre Annotation: Add a Calibre book`, to search your 
 
 You can configure the import process with the following settings:
 
-- **Calibre Library**: Specify your preferred Calibre library name to search for books.
+- **Calibre Library**: Specify your preferred Calibre library ID to search for books, which appears in URL like `http://[::1]:8080/#library_id=Calibre&panel=book_list` when browsing. Most of the time it is just the library name.
 - **Add as Block**: Choose whether to import the book as a block at the cursor position instead of creating a new page.
 - **Page Title Template**: Define the template for new Calibre page titles.
 - **Page Properties**: Select metadata properties to include, such as `tags, isbn, date, publisher, language, authors, format`. 
