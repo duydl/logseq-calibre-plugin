@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as SearchFuncs from './search';
+import * as SearchMethods from './search';
 import { clearDriftless, setDriftlessTimeout } from "driftless";
 import './SearchBar.css'
 
-const SearchBar: React.FC = () => {
+const SearchBar: React.FC<{ books: SearchMethods.CalibreItem[] }> = ( {books} ) => {
   const searchDivRef = useRef<HTMLDivElement>(null);
   const searchBarRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLUListElement>(null);
   const [typingTimer, setTypingTimer] = useState<number | undefined>(undefined);
   const exitSearch = () => {
-    SearchFuncs.exitSearch();
+    SearchMethods.exitSearch();
   };
 
   useEffect(() => {
+    searchBarRef.current?.focus();
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         exitSearch();
@@ -28,18 +29,17 @@ const SearchBar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    searchBarRef.current?.focus();
-  }, []);
+    SearchMethods.searchBook("", books);
+  }, [books]);
 
   const handleInput = () => {
     if (searchResultsRef.current) {
-      SearchFuncs.clearSearchResults();
+      SearchMethods.clearSearchResults();
       clearDriftless(typingTimer);
       setTypingTimer(
         setDriftlessTimeout(() => {
-          if (searchBarRef.current?.value) {
-            SearchFuncs.getCalibreItems(searchBarRef.current.value);
-          }
+          const inputValue = searchBarRef.current?.value || "";
+          SearchMethods.searchBook(inputValue, books);
         }, 750) as unknown as number
       );
     }

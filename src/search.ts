@@ -3,42 +3,70 @@ import Fuse from "fuse.js";
 import DigestClient from "digest-fetch";
 
 
-export async function getCalibreItems(search_input: string): Promise<void> {
+export async function getCalibreItems(): Promise<CalibreItem[]> {
     const calibreLibrary = logseq.settings?.calibreLibrary.replace(/ /g, '_');
     let fetch_link = `${logseq.settings?.serverLink}/ajax/books/${calibreLibrary}`;
-  
-    // Check for double slashes in the URL (excluding the `http://` or `https://` part)
-    const client = new DigestClient(logseq.settings?.username, logseq.settings?.password);
+
+    // Remove double slashes in the URL (excluding the protocol part)
     fetch_link = fetch_link.replace(/([^:]\/)\/+/g, '$1');
-  
+
     console.log(fetch_link);
-  
+
+    const client = new DigestClient(logseq.settings?.username, logseq.settings?.password);
+
     try {
-        const response = await client.fetch(fetch_link);
-        // const response = await client.fetch(fetch_link);
-  
-    if (!response.ok) {
-        logseq.UI.showMsg("Request to Calibre Content Server failed.", "error");
-        console.log(response);
-        return;
-    }
-  
-    const data = await response.json();
-    const books: CalibreItem[] = Object.values(data);
-    const options = {
-        threshold: 0.2,
-        keys: ["title", "authors"],
-        distance: 1000,
-      };
-    const fuse = new Fuse<CalibreItem>(books, options);
-    const search_results: Fuse.FuseResult<CalibreItem>[] = fuse.search(search_input);
-  
-    searchCalibreItems(search_results);
+        const response = await client.fetch(fetch_link, {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache', // Prevent caching
+                'Pragma': 'no-cache'         // Older HTTP/1.0 cache control
+            }
+        });
+
+        if (!response.ok) {
+            logseq.UI.showMsg(`
+                Failed to fetch data from ${fetch_link}. The server returned status code ${response.status}. Please check the following:
+                1. Verify that the URL is correct and accessible in the browser.
+                2. Ensure that the Content Server is running.
+                3. Confirm that the library ID is accurate.
+            `, "error");
+            return [];
+        }
+
+        const data = await response.json();
+        const books: CalibreItem[] = Object.values(data);
+
+        return books;
     } catch (error) {
-        console.error('Fetch or other error:', error);
-        logseq.UI.showMsg("calibreMetadata: Fail to fetch from Calibre API. Make sure to start the Content Server.", "error");
+        console.error(`Unable to fetch data from ${fetch_link}:`, error);
+        logseq.UI.showMsg(`
+            Unable to fetch data from ${fetch_link}. 
+            Please ensure that the Content Server is running.
+        `, "error");
+        return [];
     }
-  }
+}
+
+export async function searchBook(search_input: string, books: CalibreItem[]): Promise<void> {
+    // Fetch all Calibre items
+
+    if (search_input === "") {
+        // If no search input, display all items
+        displayCalibreItems(books.map(book => ({ item: book, refIndex: -1 })));
+    } else {
+        // Configure Fuse.js options
+        const options = {
+            threshold: 0.2,
+            keys: ["title", "authors"],
+            distance: 1000,
+        };
+        const fuse = new Fuse<CalibreItem>(books, options);
+        const search_results: Fuse.FuseResult<CalibreItem>[] = fuse.search(search_input);
+
+        // Display the search results
+        displayCalibreItems(search_results);
+    }
+}
 
 
 function setAttributes(element, attrs) {
@@ -72,7 +100,7 @@ export function clearSearchResults() {
 }
 
 // search_results: a list of dictionaries with one key "item" and value metadata of 1 book.
-function searchCalibreItems(search_results) {
+function displayCalibreItems(search_results) {
 
     let calibre_item;
     let calibre_item_key;
@@ -287,7 +315,7 @@ async function create(page_title, page_properties, calibre_item) {
 }
 
 
-interface CalibreItem {
+export interface CalibreItem {
     application_id: string;
     title: string;
     authors: string[];

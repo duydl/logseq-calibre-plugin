@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom'
 import DigestClient from "digest-fetch";
 import Viewer from './Viewer'
 import SearchBar from './SearchBar'
+import * as SearchMethods from './search';
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
-
 
 const settings: SettingSchemaDesc[] = [
     {
@@ -162,7 +162,9 @@ async function main() {
         ` ,
     })
 
-    renderSearchbar()
+    let books = await SearchMethods.getCalibreItems();
+    renderSearchbar(books)
+    // SearchMethods.searchBook("", books);
     logseq.showMainUI();
     const search_bar: HTMLInputElement = document.getElementById("search-bar") as HTMLInputElement;
     search_bar.focus();
@@ -426,10 +428,10 @@ function renderViewer(srcLink: string) {
   )
 }
 
-function renderSearchbar() {
+function renderSearchbar(books: SearchMethods.CalibreItem[]) {
   ReactDOM.render(
     <React.StrictMode>
-      <SearchBar />
+      <SearchBar books={books}/>
     </React.StrictMode>,
     document.getElementById('root')
   )
