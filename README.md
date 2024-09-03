@@ -66,7 +66,7 @@ You can configure the authentication settings of the plugin as follows:
 
 - **Username**: Set the username for login.
 - **Password**: Set the password for login.
-- **Open in Browser**: The sidebar viewer within Logseq does not support scenarios where login is required. Enable this option to open books and annotations in your browser instead of within Logseq.
+- **Open in Browser**: The sidebar viewer within Logseq does not support scenarios where login is required. Enable this option to open books and annotations in your browser instead of within Logseq. Further discussions on this topic can be found here https://github.com/duydl/logseq-calibre-annotation/discussions/11.  
 
 
 ### 5. Additional Tips
