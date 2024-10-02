@@ -1,7 +1,7 @@
 ☕ [Support my work](https://www.buymeacoffee.com/duydole00) if you find this helpful!
 
 
-# Logseq Calibre Annotation
+# Logseq Calibre Plugin
 
 > Now also with features from [`calibreMetadata`](https://github.com/duydl/logseq-calibre-metadata).
 
