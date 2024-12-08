@@ -1,7 +1,11 @@
 ☕ [Support my work](https://www.buymeacoffee.com/duydole00) if you find this helpful!
 
-
 # Logseq Calibre Plugin
+
+<div style="display: flex; justify-content: center; align-items: center;">
+  <img src="https://user-images.githubusercontent.com/25513724/220608753-f33db466-af72-4611-b603-411440c15ed0.png" alt="Logseq" style="width: 150px; margin-right: 100px;">
+  <img src="https://raw.githubusercontent.com/kovidgoyal/calibre/master/resources/images/lt.png" alt="Calibre" style="width: 150px;">
+</div>
 
 > Now also with features from [`calibreMetadata`](https://github.com/duydl/logseq-calibre-metadata).
 
