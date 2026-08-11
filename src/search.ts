@@ -292,12 +292,37 @@ async function create(page_title, page_properties, calibre_item) {
         await logseq.Editor.insertBlock(newBlock.uuid, `[${calibre_item.title}](calibre://show-book/${calibreLibrary}/${calibre_item.application_id})  {{renderer calibreViewer, special, /#book_id=${calibre_item.application_id}&fmt=${logseq.settings?.bookFormat}&library_id=${calibreLibrary}&mode=read_book}} {{renderer calibreHighlight, false, 2000, _, ${calibreLibrary}, ${calibre_item.application_id}, ${logseq.settings?.bookFormat}}}`);
     }
     else {
-        const newPage = await logseq.Editor.createPage(page_title, page_properties, {
+        // Do NOT pass page_properties to createPage. Logseq converts that argument with
+        // cljs-bean's ->clj, which yields a lazy Bean view rather than a real map, and
+        // stores it as the page entity's :block/properties. transit cannot serialise a
+        // Bean, so from that moment on every graph persist throws
+        //   "Cannot write $cljs_bean$core$Bean$$"
+        // and, because the main process has no handler for the resulting
+        // "persistent-dbs-error" reply, Logseq can never be closed again for the rest of
+        // the session. See logseq/logseq#8536.
+        //
+        // Writing the properties as the first block's content instead goes through
+        // Logseq's markdown property parser, which produces a genuine map. The resulting
+        // .md file is byte-identical to what the old call produced.
+        const newPage = await logseq.Editor.createPage(page_title, undefined, {
             format: "markdown",
             redirect: false,
             journal: false,
             createFirstBlock: false
         });
+
+        const propertyText = Object.entries(page_properties)
+            .map(([key, value]) => {
+                const rendered = (Array.isArray(value) ? value.join(", ") : value ?? "")
+                    .toString()
+                    .replace(/\r?\n/g, " ");
+                return rendered ? `${key}:: ${rendered}` : `${key}::`;
+            })
+            .join("\n");
+
+        if (propertyText) {
+            await logseq.Editor.appendBlockInPage(newPage?.uuid, propertyText);
+        }
 
         logseq.Editor.insertAtEditingCursor(`[[${page_title}]]`);
         logseq.Editor.exitEditingMode();
